@@ -1,0 +1,228 @@
+/* ---------- RESET ---------- */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html,body { height: 100%; }
+body {
+  font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  color: #0b1220;
+  background-color: #f6fbff;
+  transition: background 300ms ease, color 300ms ease;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+  min-height: 100vh;
+}
+
+/* Accent (purple) */
+:root {
+  --accent: #8d6bff;
+  --muted: #6b7280;
+  --card: rgba(255,255,255,0.95);
+  --glass: rgba(255,255,255,0.55);
+  --shadow: 0 10px 30px rgba(14,18,32,0.06);
+}
+
+/* Dark overrides */
+body.dark {
+  background-color: #071026;
+  color: #e6eef8;
+  --muted: #9aa8bf;
+  --card: rgba(6,8,12,0.78);
+  --glass: rgba(255,255,255,0.03);
+  --shadow: 0 10px 30px rgba(0,0,0,0.6);
+}
+
+/* ---------- NAVBAR (left-aligned) ---------- */
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 16px 28px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.80), rgba(255,255,255,0.60));
+  border-bottom: 1px solid rgba(0,0,0,0.04);
+  position: sticky;
+  top: 0;
+  z-index: 60;
+}
+body.dark .navbar {
+  background: linear-gradient(180deg, rgba(6,8,12,0.88), rgba(6,8,12,0.6));
+  border-bottom: 1px solid rgba(255,255,255,0.03);
+}
+
+.nav-left { display:flex; gap:18px; align-items:center; }
+.logo {
+  font-weight: 800;
+  font-size: 1.25rem;
+  color: var(--accent);
+  text-decoration: none;
+}
+.nav-links { display:flex; gap:12px; align-items:center; }
+.nav-links a { color: var(--muted); text-decoration:none; font-weight:600; font-size:0.95rem; }
+.nav-links a[aria-disabled="true"] { opacity:0.45; pointer-events:none; }
+
+/* small button styles */
+.btn {
+  padding: 8px 14px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  font-weight:700;
+  font-size:.95rem;
+}
+.btn.primary { background: var(--accent); color: white; box-shadow: 0 8px 18px rgba(141,107,255,0.18); }
+.btn.ghost { background: transparent; color: var(--muted); border: 1px solid rgba(0,0,0,0.04); }
+
+/* ---------- HERO (landing) ---------- */
+.hero {
+  position: relative;
+  width: 100%;
+  min-height: 70vh;
+  display: grid;
+  grid-template-rows: 1fr;
+  overflow: hidden;
+}
+
+/* pastel-sky background image (choice B) */
+body { background-image: url('https://images.unsplash.com/photo-1503602642458-232111445657?auto=format&fit=crop&w=1950&q=80'); background-size: cover; background-position: center; }
+
+/* Map hero placed under overlay; map covers hero area */
+.map-hero {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+/* overlay where hero text & search live */
+.hero-overlay {
+  position: relative;
+  z-index: 30;
+  display:flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 20px;
+  text-align: center;
+  color: #06202a;
+  backdrop-filter: blur(3px);
+}
+
+body.dark .hero-overlay { color: #eaf0ff; }
+
+.hero-title {
+  font-size: 4rem;
+  letter-spacing: -0.02em;
+  margin-bottom: 6px;
+  font-weight: 800;
+  color: #06202a;
+}
+body.dark .hero-title { color: #eaf0ff; }
+
+.hero-sub { color: var(--muted); margin-bottom:18px; font-weight:600; }
+
+/* search on hero */
+.hero-search { display:flex; flex-direction:column; gap:10px; align-items:center; }
+.hero-search input {
+  width: 480px; max-width: calc(100vw - 80px);
+  padding: 14px 16px;
+  border-radius: 12px;
+  border: 1px solid rgba(10,10,10,0.06);
+  background: rgba(255,255,255,0.95);
+  box-shadow: var(--shadow);
+  outline: none;
+  font-size: 1rem;
+}
+body.dark .hero-search input { background: rgba(8,10,14,0.9); color: #e6eef8; border:1px solid rgba(255,255,255,0.04); }
+
+.hero-search .hint { font-size: .85rem; color: var(--muted); margin-top:8px; }
+
+/* ensure map is visible and covers hero area */
+.map-hero .leaflet-container {
+  width: 100%;
+  height: 100%;
+  opacity: 0.98;
+  filter: saturate(0.96) contrast(1.02);
+}
+
+/* ---------- RESULTS PAGE ---------- */
+.results-main {
+  max-width: 1200px;
+  margin: 36px auto;
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  gap: 22px;
+  padding: 0 20px 60px;
+}
+
+.results-header h2 { font-size: 1.5rem; margin-bottom:6px; }
+.results-header .muted { color: var(--muted); margin-bottom: 12px; }
+
+/* cards container */
+.results-cards {
+  display: flex;
+  gap: 18px;
+  flex-wrap: wrap;
+}
+
+/* each forecast card */
+.card {
+  width: 320px;
+  border-radius: 14px;
+  padding: 18px;
+  background: var(--card);
+  box-shadow: var(--shadow);
+  transition: transform .12s ease;
+}
+.card:hover { transform: translateY(-6px); }
+
+.card .card-head { display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; }
+.card .big { font-size: 2.4rem; font-weight: 800; }
+.card .muted { color: var(--muted); }
+
+/* wear panel */
+.results-wear {
+  position: sticky;
+  top: 90px;
+  padding: 18px;
+  border-radius: 12px;
+  background: var(--card);
+  box-shadow: var(--shadow);
+}
+.wear-list { list-style:none; display:flex; flex-direction:column; gap:10px; }
+.wear-list li { padding: 10px 12px; border-radius: 8px; background: rgba(0,0,0,0.02); color: inherit; }
+
+/* small utility */
+.muted { color: var(--muted); }
+
+/* footer */
+.footer { text-align:center; padding: 18px 0; color: var(--muted); }
+
+/* floating mode toggle bottom-right */
+.mode-toggle {
+  position: fixed;
+  right: 18px;
+  bottom: 18px;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  border: none;
+  background: white;
+  box-shadow: 0 10px 28px rgba(15,15,15,0.08);
+  cursor: pointer;
+  display:flex; align-items:center; justify-content:center;
+  font-size: 1.1rem;
+  z-index: 70;
+}
+body.dark .mode-toggle { background: #0b1220; color: #fff; box-shadow: 0 10px 28px rgba(0,0,0,0.6); }
+
+/* responsive */
+@media (max-width: 980px) {
+  .results-main { grid-template-columns: 1fr; padding: 0 14px 60px; }
+  .results-wear { position: static; }
+  .hero-title { font-size: 3rem; }
+  .hero-search input { width: 360px; }
+}
+@media (max-width: 520px) {
+  .hero-title { font-size: 2.2rem; }
+  .hero-search input { width: calc(100vw - 48px); }
+  .card { width: 100%; }
+  .map-hero { height: 48vh; }
+}

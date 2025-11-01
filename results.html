@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>SkyCast — Results</title>
+  <link rel="stylesheet" href="weather.css" />
+</head>
+<body>
+  <!-- NAVBAR -->
+  <header class="navbar">
+    <div class="nav-left">
+      <a class="logo" href="index.html">SkyCast</a>
+      <nav class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="#" aria-disabled="true">Features</a>
+        <a href="#" aria-disabled="true">About</a>
+      </nav>
+    </div>
+
+    <div class="nav-right">
+      <a href="index.html" class="btn ghost">New Search</a>
+    </div>
+  </header>
+
+  <!-- RESULTS LAYOUT: forecast cards + right wear panel -->
+  <main class="results-main">
+    <section class="results-forecast">
+      <div class="results-header">
+        <h2 id="resultsTitle">Forecast</h2>
+        <p id="resultsSubtitle" class="muted">Loading...</p>
+      </div>
+
+      <div class="results-cards" id="resultsCards">
+        <!-- cards injected by JS -->
+      </div>
+    </section>
+
+    <aside class="results-wear" id="resultsWear">
+      <h3>SkyCast Styling Tips</h3>
+      <ul id="resultsWearList" class="wear-list">
+        <li class="muted">No data yet — search to get outfit suggestions</li>
+      </ul>
+    </aside>
+  </main>
+
+  <footer class="footer small">
+    © 2025 SkyCast
+  </footer>
+
+  <!-- floating mode toggle -->
+  <button id="modeToggleResults" class="mode-toggle" aria-label="Toggle dark mode">🌙</button>
+
+  <script src="weather.js"></script>
+</body>
+</html>

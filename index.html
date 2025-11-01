@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>SkyCast — Landing</title>
+
+  <!-- Leaflet CSS (map) -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+  <link rel="stylesheet" href="weather.css" />
+</head>
+<body>
+  <!-- NAVBAR -->
+  <header class="navbar">
+    <div class="nav-left">
+      <a class="logo" href="index.html">SkyCast</a>
+      <nav class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="#" aria-disabled="true">Features</a>
+        <a href="#" aria-disabled="true">About</a>
+      </nav>
+    </div>
+
+    <div class="nav-right">
+      <button id="demoBtn" class="btn ghost" title="Demo">Demo</button>
+    </div>
+  </header>
+
+  <!-- HERO: full map under navbar, pastel-sky bg -->
+  <section class="hero">
+    <div class="hero-overlay">
+      <h1 class="hero-title">SkyCast</h1>
+      <p class="hero-sub">Live forecast • Outfit suggestions • Pin any location</p>
+
+      <div class="hero-search">
+        <input id="heroSearch" type="search" placeholder="Search city, state, or country" aria-label="Search location" />
+        <div style="display:flex;gap:10px;align-items:center;flex-direction:row;">
+          <button id="heroSearchBtn" class="btn primary">Search</button>
+          <button id="usePinBtn" class="btn ghost" title="Use pin if placed">Use pin</button>
+        </div>
+        <small class="hint">Or click anywhere on the map to place a pin, then press "Use pin" → results</small>
+      </div>
+    </div>
+
+    <!-- Map (Leaflet) -->
+    <div id="mapHero" class="map-hero" aria-label="Interactive map"></div>
+  </section>
+
+  <footer class="footer small">
+    © 2025 SkyCast — Student Project
+  </footer>
+
+  <!-- floating mode toggle (bottom-right) -->
+  <button id="modeToggle" class="mode-toggle" aria-label="Toggle dark mode">🌙</button>
+
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+  <script src="weather.js"></script>
+</body>
+</html>
