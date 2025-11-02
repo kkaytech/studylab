@@ -1,7 +1,4 @@
-/* ---------- SkyCast JS — OpenWeatherMap API version ---------- */
-
-/* Your OpenWeatherMap API key */
-const API_KEY = "84c02736f73d2bd0e21ec68b1031296a";
+/* ---------- SkyCast JS — Simulated Weather Version ---------- */
 
 /* ---------- Helpers ---------- */
 function $(sel) { return document.querySelector(sel); }
@@ -33,6 +30,25 @@ initMode();
 const isIndex = !!$("#mapHero");
 const isResults = !!$("#resultsCards");
 
+/* ---------- Simulate weather ---------- */
+function randomWeather() {
+  const types = ["Clear", "Clouds", "Rain", "Thunderstorm", "Snow"];
+  const descs = {
+    Clear: ["Sunny", "Bright", "Clear sky"],
+    Clouds: ["Partly cloudy", "Cloudy", "Overcast"],
+    Rain: ["Light rain", "Showers", "Drizzle"],
+    Thunderstorm: ["Thunderstorm", "Stormy", "Lightning"],
+    Snow: ["Snowfall", "Snowy", "Blizzard"]
+  };
+  const type = types[Math.floor(Math.random() * types.length)];
+  const temp = Math.floor(Math.random() * 25) + 5; // 5°C to 30°C
+  const humidity = Math.floor(Math.random() * 60) + 30; // 30%-90%
+  const wind = (Math.random() * 5 + 1).toFixed(1); // 1-6 m/s
+  const descArray = descs[type];
+  const description = descArray[Math.floor(Math.random() * descArray.length)];
+  return { type, description, temp, humidity, wind };
+}
+
 /* ---------- Weather helpers ---------- */
 function iconForDesc(desc) {
   if (!desc) return "🌤️";
@@ -46,8 +62,8 @@ function iconForDesc(desc) {
 }
 
 function generateWearSuggestions(today) {
-  const t = Math.round(today.temp.day);
-  const desc = (today.weather[0].main || "").toLowerCase();
+  const t = today.temp;
+  const desc = (today.type || "").toLowerCase();
   const items = [];
   if (desc.includes("rain") || desc.includes("drizzle") || desc.includes("thunder")) {
     items.push("Waterproof jacket / raincoat");
@@ -80,25 +96,6 @@ function generateWearSuggestions(today) {
   return items;
 }
 
-/* ---------- Fetch weather ---------- */
-async function fetchWeather(lat, lon) {
-  const url = `https://api.openweathermap.org/data/3.0/onecall?lat=${lat}&lon=${lon}&exclude=minutely,hourly,alerts&units=metric&appid=${API_KEY}`;
-  const resp = await fetch(url);
-  if (!resp.ok) throw new Error("Weather API fetch failed");
-  const data = await resp.json();
-  return data.daily.slice(0, 3); // today + next 2 days
-}
-
-/* ---------- Geocode city ---------- */
-async function geocodeCity(city) {
-  const url = `https://api.openweathermap.org/geo/1.0/direct?q=${encodeURIComponent(city)}&limit=1&appid=${API_KEY}`;
-  const resp = await fetch(url);
-  if (!resp.ok) throw new Error("Geocoding failed");
-  const data = await resp.json();
-  if (!data.length) throw new Error("City not found");
-  return { lat: data[0].lat, lon: data[0].lon, name: data[0].name };
-}
-
 /* ---------- INDEX PAGE ---------- */
 if (isIndex) {
   const map = L.map("mapHero", { center: [20, 0], zoom: 2, preferCanvas: true });
@@ -125,25 +122,17 @@ if (isIndex) {
     window.location.href = `results.html?${params}`;
   }
 
-  heroBtn.addEventListener("click", async () => {
+  heroBtn.addEventListener("click", () => {
     const q = heroInput.value.trim();
-    try {
-      if (q) {
-        const geo = await geocodeCity(q);
-        return redirectToResults({ lat: geo.lat, lon: geo.lon, city: geo.name });
-      }
-      if (map._lastClicked) {
-        const { lat, lng } = map._lastClicked;
-        return redirectToResults({ lat: lat.toFixed(5), lon: lng.toFixed(5) });
-      }
-      alert("Type a city or click the map to pick a location.");
-    } catch (err) {
-      alert(err.message);
+    if (q) return redirectToResults({ city: q });
+    if (map._lastClicked) {
+      const { lat, lng } = map._lastClicked;
+      return redirectToResults({ lat: lat.toFixed(5), lon: lng.toFixed(5) });
     }
+    alert("Type a city or click the map to pick a location.");
   });
 
   heroInput.addEventListener("keydown", (e) => { if (e.key === "Enter") heroBtn.click(); });
-
   usePinBtn.addEventListener("click", () => {
     if (map._lastClicked) {
       const { lat, lng } = map._lastClicked;
@@ -159,65 +148,59 @@ if (isResults) {
   const params = new URLSearchParams(window.location.search);
   const lat = params.get("lat");
   const lon = params.get("lon");
-  const cityName = params.get("city") || "";
+  const cityName = params.get("city") || "Your location";
 
   const resultsTitle = $("#resultsTitle");
   const resultsSubtitle = $("#resultsSubtitle");
   const cardsContainer = $("#resultsCards");
   const wearList = $("#resultsWearList");
 
-  async function loadResults() {
-    try {
-      resultsSubtitle.textContent = "Loading forecast…";
-      const forecast = await fetchWeather(lat, lon);
-      resultsTitle.textContent = cityName ? `Forecast for ${cityName}` : `Forecast for Lat ${lat}, Lon ${lon}`;
-      resultsSubtitle.textContent = "Today + next 2 days";
+  function loadResults() {
+    resultsTitle.textContent = `Forecast for ${cityName}`;
+    resultsSubtitle.textContent = "Today + next 2 days";
 
-      // Fill cards
-      cardsContainer.innerHTML = "";
-      forecast.forEach((day, i) => {
-        const dateLabel = i === 0 ? "Today" : i === 1 ? "Tomorrow" : "Day after";
-        const c = document.createElement("article");
-        c.className = "card";
-        c.innerHTML = `
-          <div class="card-head">
-            <div>
-              <div class="muted">${dateLabel}</div>
-              <div class="location muted">${cityName || `Lat ${lat}, Lon ${lon}`}</div>
-            </div>
-            <div style="text-align:right">
-              <div style="font-size:1.2rem">${iconForDesc(day.weather[0].main)}</div>
-              <div class="muted" style="font-size:.92rem">${day.weather[0].main}</div>
-            </div>
+    // Generate 3-day simulated forecast
+    const forecast = [randomWeather(), randomWeather(), randomWeather()];
+
+    // Fill forecast cards
+    cardsContainer.innerHTML = "";
+    forecast.forEach((day, i) => {
+      const dateLabel = i === 0 ? "Today" : i === 1 ? "Tomorrow" : "Day after";
+      const c = document.createElement("article");
+      c.className = "card";
+      c.innerHTML = `
+        <div class="card-head">
+          <div>
+            <div class="muted">${dateLabel}</div>
+            <div class="location muted">${cityName}</div>
           </div>
-
-          <div style="display:flex;align-items:center;justify-content:space-between;">
-            <div class="big">${Math.round(day.temp.day)}°C</div>
-            <div style="text-align:right">
-              <div class="muted">Humidity</div>
-              <div>${day.humidity}%</div>
-            </div>
+          <div style="text-align:right">
+            <div style="font-size:1.2rem">${iconForDesc(day.type)}</div>
+            <div class="muted" style="font-size:.92rem">${day.description}</div>
           </div>
+        </div>
 
-          <p class="muted" style="margin-top:12px">Wind: ${day.wind_speed} m/s</p>
-        `;
-        cardsContainer.appendChild(c);
-      });
+        <div style="display:flex;align-items:center;justify-content:space-between;">
+          <div class="big">${day.temp}°C</div>
+          <div style="text-align:right">
+            <div class="muted">Humidity</div>
+            <div>${day.humidity}%</div>
+          </div>
+        </div>
 
-      // Fill wear tips
-      wearList.innerHTML = "";
-      const suggestions = generateWearSuggestions(forecast[0]);
-      suggestions.forEach(s => {
-        const li = document.createElement("li");
-        li.textContent = s;
-        wearList.appendChild(li);
-      });
+        <p class="muted" style="margin-top:12px">Wind: ${day.wind} m/s</p>
+      `;
+      cardsContainer.appendChild(c);
+    });
 
-    } catch (err) {
-      resultsSubtitle.textContent = "Failed to load weather.";
-      console.error(err);
-      alert("Error fetching weather: " + err.message);
-    }
+    // Fill wear suggestions
+    wearList.innerHTML = "";
+    const suggestions = generateWearSuggestions(forecast[0]);
+    suggestions.forEach(s => {
+      const li = document.createElement("li");
+      li.textContent = s;
+      wearList.appendChild(li);
+    });
   }
 
   loadResults();
