@@ -1,62 +1,109 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>SkyCast — Landing</title>
-
-  <!-- Leaflet CSS (map) -->
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-
-  <link rel="stylesheet" href="weather.css" />
+  <title>Study Dashboard</title>
+  <link rel="stylesheet" href="dashb.css" />
 </head>
 <body>
-  <!-- NAVBAR -->
-  <header class="navbar">
-    <div class="nav-left">
-      <a class="logo" href="index.html">SkyCast</a>
-      <nav class="nav-links">
-        <a href="index.html">Home</a>
-        <a href="#" aria-disabled="true">Features</a>
-        <a href="#" aria-disabled="true">About</a>
-      </nav>
-    </div>
+  <div class="dashboard">
+    <main class="main-content">
+      <header>
+        <button id="darkModeToggle" aria-label="Toggle dark mode">🌙</button>
+      </header>
 
-    <div class="nav-right">
-      <button id="demoBtn" class="btn ghost" title="Demo">Demo</button>
-    </div>
-  </header>
-
-  <!-- HERO: full map under navbar, pastel-sky bg -->
-  <section class="hero">
-    <div class="hero-overlay">
-      <h1 class="hero-title">SkyCast</h1>
-      <p class="hero-sub">Live forecast • Outfit suggestions • Pin any location</p>
-
-      <div class="hero-search">
-        <input id="heroSearch" type="search" placeholder="Search city, state, or country" aria-label="Search location" />
-        <div style="display:flex;gap:10px;align-items:center;flex-direction:row;">
-          <button id="heroSearchBtn" class="btn primary">Search</button>
-          <button id="usePinBtn" class="btn ghost" title="Use pin if placed">Use pin</button>
+      <!-- Modern Navbar -->
+  <nav class="navbar">
+    <div class="nav-content">
+      <div class="logo">
+        <a href="index.html">📚 StudyLab</a>
+      </div>
+      <ul class="menu-list">
+        <div class="icon cancel-btn">
+          <i class="fas fa-times">×</i>
         </div>
-        <small class="hint">Or click anywhere on the map to place a pin, then press "Use pin" → results</small>
+        <li><a href="index.html" class="active">Home</a></li>
+        <li><a href="calendar.html">Calendar</a></li>
+      </ul>
+      <div class="icon menu-btn">
+        <i class="fas fa-bars">☰</i>
       </div>
     </div>
+  </nav>
 
-    <!-- Map (Leaflet) -->
-    <div id="mapHero" class="map-hero" aria-label="Interactive map"></div>
-  </section>
+      <section class="cards-container">
+        <!-- Pomodoro Timer Card -->
+        <article class="card" id="pomodoroCard">
+          <h2>Pomodoro Timer</h2>
+          <div class="pomodoro-inputs">
+            <input type="number" id="pomodoro-minutes" placeholder="Minutes" min="1" />
+            <button id="setTimerBtn">Set Timer</button>
+          </div>
+          <div class="progress-ring-container">
+            <svg class="progress-ring" width="120" height="120">
+              <circle class="progress-ring__circle" stroke="#CDB599" stroke-width="8" fill="transparent" r="54" cx="60" cy="60"/>
+            </svg>
+            <div id="timer" aria-live="polite">25:00</div>
+          </div>
+          <div class="pomodoro-controls">
+            <button id="startTimer">Start</button>
+            <button id="pauseTimer">Pause</button>
+            <button id="resetTimer">Reset</button>
+            <button id="shortBreak">5 min Break</button>
+            <button id="longBreak">15 min Break</button>
+          </div>
+        </article>
 
-  <footer class="footer small">
-    © 2025 SkyCast — Student Project
-  </footer>
+        <!-- Bottom Section for To-Do & Goals -->
+        <section class="bottom-section">
+          <!-- To-Do Box -->
+          <article class="card todo-card">
+            <h2>To-Do List</h2>
+            <ul id="todo-list"></ul>
+            <input type="text" id="todo-input" placeholder="Add a task..." />
+            <select id="priority-select">
+              <option value="low">Low </option>
+              <option value="medium">Medium </option>
+              <option value="high">High </option>
+            </select>
+            <button id="add-todo-btn">➕ Add</button>
+            <button id="clear-todo-btn">🗑 Clear All</button>
+          </article>
 
-  <!-- floating mode toggle (bottom-right) -->
-  <button id="modeToggle" class="mode-toggle" aria-label="Toggle dark mode">🌙</button>
+          <!-- Goals Box -->
+          <article class="card goals-card">
+            <h2>Goals</h2>
+            <div id="goals-list"></div>
+            <input type="text" id="goals-input" placeholder="Add a new goal..." />
+            <button id="add-goal-btn">➕ Add Goal</button>
+            <button id="clear-goal-btn">🗑 Clear All</button>
+          </article>
+        </section>
 
-  <!-- Leaflet JS -->
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+        <!-- Stats Section -->
+      <section class="stats-section">
+        <div class="card stat-card">
+          <div class="stat-value" id="completed-tasks">0</div>
+          <div class="stat-label">Tasks Completed</div>
+        </div>
+        <div class="card stat-card">
+          <div class="stat-value" id="study-time">0h 0m</div>
+          <div class="stat-label">Study Time Today</div>
+        </div>
+        <div class="card stat-card">
+          <div class="stat-value" id="goals-achieved">0</div>
+          <div class="stat-label">Goals Achieved</div>
+        </div>
+        <div class="card stat-card">
+          <div class="stat-value" id="focus-sessions">0</div>
+          <div class="stat-label">Focus Sessions</div>
+        </div>
+      </section>
+    </main>
+  </div>
 
-  <script src="weather.js"></script>
+
+  <script src="dashb.js"></script>
 </body>
 </html>

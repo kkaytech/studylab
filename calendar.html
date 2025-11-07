@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Study Calendar</title>
+    <link rel="stylesheet" href="calendar.css">
+</head>
+<body>
+
+    <!-- Modern Navbar -->
+  <nav class="navbar">
+    <div class="nav-content">
+      <div class="logo">
+        <a href="index.html">📚 StudyLab</a>
+      </div>
+      <ul class="menu-list">
+        <div class="icon cancel-btn">
+          <i class="fas fa-times">×</i>
+        </div>
+        <li><a href="index.html" class="active">Home</a></li>
+        <li><a href="calendar.html">Calendar</a></li>
+      </ul>
+      <div class="icon menu-btn">
+        <i class="fas fa-bars">☰</i>
+      </div>
+    </div>
+  </nav>
+
+    <div class="container">
+        <div class="calendar-container">
+            <div class="calendar-header">
+                <button id="prev-month" class="nav-btn">←</button>
+                <h2 id="month-year">August 2024</h2>
+                <button id="next-month" class="nav-btn">→</button>
+            </div>
+            
+            
+            <div class="calendar">
+                <div class="day-names">
+                    <span>Sun</span>
+                    <span>Mon</span>
+                    <span>Tue</span>
+                    <span>Wed</span>
+                    <span>Thu</span>
+                    <span>Fri</span>
+                    <span>Sat</span>
+                </div>
+                <div class="days" id="days">
+                    <!-- JS will fill in the days here -->
+                </div>
+            </div>
+        </div>
+
+        <div class="side-panel">
+            <div class="reminder-container card">
+                <h3>📝 Today's Reminders</h3>
+                <div class="reminder-input">
+                    <input type="text" id="reminder-input" placeholder="Add a reminder...">
+                    <button id="add-reminder" class="add-btn">+</button>
+                </div>
+
+                <button class="clear-btn" onclick="clearAllReminders()">🗑 Clear All Reminders</button>
+                <ul id="reminder-list">
+                    <!-- Reminders go here -->
+                </ul>
+            </div>
+
+
+            <div class="todo-container card">
+                <h3>✅ To Do List</h3>
+                <div class="todo-input">
+                    <input type="text" id="todo-input" placeholder="Add a task...">
+                    <button id="add-todo" class="add-btn">+</button>
+                </div>
+                <button class="clear-btn" onclick="clearAllTodos()">🗑 Clear All Todos</button>
+                <ul id="todo-list">
+                    <!-- To-dos go here -->
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script src="calendar.js"></script>
+</body>
+</html>
