@@ -4,7 +4,7 @@ A productivity web app built for students to manage their study sessions,
 tasks, goals, and schedule — all in one place. No sign-up, no backend,
 everything saves locally in your browser.
 
-🔗 **[Live Demo →](https://kkaytech.github.io/studylab/)**
+🔗 **[Live Demo  →](https://kkaytech.github.io/studylab/)**
 
 ## Features
 
